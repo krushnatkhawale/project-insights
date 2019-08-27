@@ -6,6 +6,8 @@ import static java.lang.String.format;
 
 public class Dependency {
 
+    public static final String REMOTE = "files-2.1\\";
+    public static final String LOCAL = "repository\\";
     private String group;
     private String artifact;
     private String version;
@@ -40,14 +42,25 @@ public class Dependency {
         this.version = version;
     }
 
-    public static Dependency toDependecy(File dependency) {
+    public static Dependency toDependecy(File file) {
 
-        File versionDir = dependency.getParentFile().getParentFile();
+        String trimmedPath = getTrimmedPath(file);
+
+        File versionDir = file.getParentFile().getParentFile();
         String version = versionDir.getName();
         String artifact = versionDir.getParentFile().getName();
         String group = versionDir.getParentFile().getParentFile().getName();
 
         return new Dependency(group, artifact, version);
+    }
+
+    private static String getTrimmedPath(File file) {
+        String path = file.toPath().toString();
+        if (file.getPath().contains(REMOTE)) {
+            return path.substring(path.indexOf(REMOTE) + REMOTE.length() + 1);
+        } else {
+            return path.substring(path.indexOf(LOCAL) + LOCAL.length() + 1);
+        }
     }
 
     @Override
