@@ -2,17 +2,13 @@ package com.example.plugin;
 
 import com.example.model.Dependency;
 import com.example.model.Info;
+import com.example.util.Utils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.TaskAction;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -37,6 +33,7 @@ public class DependencyCollectionTask extends DefaultTask {
     void taskAction() {
 
         Info projectInfo = getProjectInfo();
+
         projectInfo.print();
 
         post(projectInfo);
@@ -49,23 +46,7 @@ public class DependencyCollectionTask extends DefaultTask {
             return;
         }
 
-        try {
-            String infoString = projectInfo.toInfoString();
-            URL url = new URL(projectInfo.getHost());
-
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
-            con.setDoOutput(true);
-            try (OutputStream os = con.getOutputStream()) {
-                byte[] input = infoString.getBytes("utf-8");
-                os.write(input, 0, input.length);
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("  DONE");
+        Utils.post(projectInfo);
     }
 
     private Info getProjectInfo() {

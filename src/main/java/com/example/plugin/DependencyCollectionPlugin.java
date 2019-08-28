@@ -21,6 +21,5 @@ public class DependencyCollectionPlugin implements Plugin<Project> {
 
         buildTask.dependsOn(thisTask);
 
-
     }
 }
