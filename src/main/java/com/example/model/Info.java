@@ -1,4 +1,4 @@
-package com.example;
+package com.example.model;
 
 import java.util.List;
 
@@ -6,10 +6,10 @@ import static java.lang.String.format;
 
 public class Info {
 
-    String appName;
-    String groupName;
-    List<Dependency> dependencies;
-    String host;
+    private String appName;
+    private String groupName;
+    private List<Dependency> dependencies;
+    private String host;
 
     public String getAppName() {
         return appName;
@@ -54,5 +54,4 @@ public class Info {
     private static final String INFO_STRING = "  App: %s\n" +
             "  Group: %s\n" +
             "  No of dependencies: %s\n";
-
 }

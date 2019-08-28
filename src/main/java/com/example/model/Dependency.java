@@ -1,4 +1,4 @@
-package com.example;
+package com.example.model;
 
 import java.io.File;
 import java.util.regex.Pattern;

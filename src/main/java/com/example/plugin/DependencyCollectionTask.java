@@ -1,5 +1,7 @@
-package com.example;
+package com.example.plugin;
 
+import com.example.model.Dependency;
+import com.example.model.Info;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
@@ -33,7 +35,6 @@ public class DependencyCollectionTask extends DefaultTask {
 
     @TaskAction
     void taskAction() {
-        System.out.println("  Task is being executed!");
 
         Info projectInfo = getProjectInfo();
         projectInfo.print();
