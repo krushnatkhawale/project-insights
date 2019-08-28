@@ -20,10 +20,16 @@ import static java.util.Optional.ofNullable;
 
 public class DependencyCollectionTask extends DefaultTask {
 
-    Project project = getProject();
+    private Project project = getProject();
 
     @Input
     String targetUrl;
+
+    @Input
+    String appName;
+
+    @Input
+    boolean disablePost;
 
     @TaskAction
     void taskAction() {
@@ -36,6 +42,12 @@ public class DependencyCollectionTask extends DefaultTask {
     }
 
     private void post(Info projectInfo) {
+
+        if (disablePost) {
+            System.out.println("  Dependency posting disabled!");
+            return;
+        }
+
         try {
             String infoString = projectInfo.toInfoString();
             URL url = new URL(projectInfo.getHost());
@@ -58,14 +70,14 @@ public class DependencyCollectionTask extends DefaultTask {
     private Info getProjectInfo() {
 
         String group = project.getGroup().toString();
-        String applicationName = project.getName();
+        String appName = ofNullable(this.appName).orElse(project.getName());
         List<Dependency> collect = getDependencies(project);
 
         String host = ofNullable(targetUrl).orElse("defaultHost:8080//path");
 
         Info info = new Info();
         info.setGroupName(group);
-        info.setAppName(applicationName);
+        info.setAppName(appName);
         info.setDependencies(collect);
         info.setHost(host);
         return info;
