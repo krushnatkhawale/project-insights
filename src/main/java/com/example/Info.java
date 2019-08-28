@@ -9,6 +9,7 @@ public class Info {
     String appName;
     String groupName;
     List<Dependency> dependencies;
+    String host;
 
     public String getAppName() {
         return appName;
@@ -32,6 +33,14 @@ public class Info {
 
     public void setDependencies(List<Dependency> dependencies) {
         this.dependencies = dependencies;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 
     public String toInfoString() {

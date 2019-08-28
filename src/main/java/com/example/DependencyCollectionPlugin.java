@@ -6,7 +6,7 @@ import org.gradle.api.Task;
 
 public class DependencyCollectionPlugin implements Plugin<Project> {
 
-    public static final String TASK_NAME = "dependency-collection";
+    public static final String TASK_NAME = "dependencyCollection";
     public static final String BUILD_TASK = "build";
     private DefaultAction defaultAction = new DefaultAction();
 

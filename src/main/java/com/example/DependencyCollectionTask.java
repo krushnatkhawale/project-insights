@@ -3,6 +3,7 @@ package com.example;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.TaskAction;
 
 import java.io.IOException;
@@ -15,7 +16,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Optional.ofNullable;
+
 public class DependencyCollectionTask extends DefaultTask {
+
+    Project project = getProject();
+
+    @Input
+    String targetUrl;
 
     @TaskAction
     void taskAction() {
@@ -30,11 +38,12 @@ public class DependencyCollectionTask extends DefaultTask {
     private void post(Info projectInfo) {
         try {
             String infoString = projectInfo.toInfoString();
-            URL url = new URL("https://reqres.in/api/users");
+            URL url = new URL(projectInfo.getHost());
+
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
             con.setDoOutput(true);
-            try(OutputStream os = con.getOutputStream()) {
+            try (OutputStream os = con.getOutputStream()) {
                 byte[] input = infoString.getBytes("utf-8");
                 os.write(input, 0, input.length);
             }
@@ -43,20 +52,22 @@ public class DependencyCollectionTask extends DefaultTask {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("  DONE");
     }
 
     private Info getProjectInfo() {
-        Project project = getProject();
 
         String group = project.getGroup().toString();
         String applicationName = project.getName();
         List<Dependency> collect = getDependencies(project);
 
+        String host = ofNullable(targetUrl).orElse("defaultHost:8080//path");
+
         Info info = new Info();
         info.setGroupName(group);
         info.setAppName(applicationName);
         info.setDependencies(collect);
-
+        info.setHost(host);
         return info;
     }
 
