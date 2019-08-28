@@ -1,6 +1,7 @@
 package com.example;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 import static java.lang.String.format;
 
@@ -42,14 +43,14 @@ public class Dependency {
         this.version = version;
     }
 
-    public static Dependency toDependecy(File file) {
+    public static Dependency toDependency(File file) {
 
         String trimmedPath = getTrimmedPath(file);
+        String[] tokens = trimmedPath.split(Pattern.quote(File.separator));
 
-        File versionDir = file.getParentFile().getParentFile();
-        String version = versionDir.getName();
-        String artifact = versionDir.getParentFile().getName();
-        String group = versionDir.getParentFile().getParentFile().getName();
+        String group = tokens[0];
+        String artifact = tokens[1];
+        String version = tokens[2];
 
         return new Dependency(group, artifact, version);
     }
@@ -57,9 +58,9 @@ public class Dependency {
     private static String getTrimmedPath(File file) {
         String path = file.toPath().toString();
         if (file.getPath().contains(REMOTE)) {
-            return path.substring(path.indexOf(REMOTE) + REMOTE.length() + 1);
+            return path.substring(path.indexOf(REMOTE) + REMOTE.length());
         } else {
-            return path.substring(path.indexOf(LOCAL) + LOCAL.length() + 1);
+            return path.substring(path.indexOf(LOCAL) + LOCAL.length());
         }
     }
 

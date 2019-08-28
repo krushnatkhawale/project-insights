@@ -5,6 +5,11 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.tasks.TaskAction;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -13,28 +18,56 @@ import java.util.stream.Collectors;
 public class DependencyCollectionTask extends DefaultTask {
 
     @TaskAction
-    void postInfo() {
+    void taskAction() {
         System.out.println("  Task is being executed!");
 
+        Info projectInfo = getProjectInfo();
+        projectInfo.print();
+
+        post(projectInfo);
+    }
+
+    private void post(Info projectInfo) {
+        try {
+            String infoString = projectInfo.toInfoString();
+            URL url = new URL("https://reqres.in/api/users");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+            con.setDoOutput(true);
+            try(OutputStream os = con.getOutputStream()) {
+                byte[] input = infoString.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Info getProjectInfo() {
         Project project = getProject();
 
-        System.out.println("  Group: " + getGroup());
-        System.out.println("  Project: " + project);
-        System.out.println("  Service: " + getServices());
+        String group = project.getGroup().toString();
+        String applicationName = project.getName();
+        List<Dependency> collect = getDependencies(project);
 
-        List<Dependency> collect = project.getConfigurations()
+        Info info = new Info();
+        info.setGroupName(group);
+        info.setAppName(applicationName);
+        info.setDependencies(collect);
+
+        return info;
+    }
+
+    private List<Dependency> getDependencies(Project project) {
+        return project.getConfigurations()
                 .stream()
                 .filter(config -> config.getName().contains("compile"))
                 .map(Configuration::resolve)
                 .flatMap(Collection::stream)
-                .map(Dependency::toDependecy)
+                .map(Dependency::toDependency)
                 .sorted((Comparator.comparing(Dependency::getGroup)))
                 .collect(Collectors.toList());
-
-        collect.forEach(cd -> {
-            System.out.println("   \\ d: " + cd);
-        });
-
-        System.out.println("Test - 1");
     }
 }
