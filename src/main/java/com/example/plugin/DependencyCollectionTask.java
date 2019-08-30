@@ -71,7 +71,7 @@ public class DependencyCollectionTask extends DefaultTask {
                 .filter(config -> config.getName().contains("compile"))
                 .map(Configuration::resolve)
                 .flatMap(Collection::stream)
-                .map(Dependency::toDependency)
+                .map(Utils::toDependency)
                 .sorted((Comparator.comparing(Dependency::getGroup)))
                 .collect(Collectors.toList());
     }

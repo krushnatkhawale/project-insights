@@ -7,8 +7,6 @@ import static java.lang.String.format;
 
 public class Dependency {
 
-    public static final String REMOTE = "files-2.1\\";
-    public static final String LOCAL = "repository\\";
     private String group;
     private String artifact;
     private String version;
@@ -43,26 +41,6 @@ public class Dependency {
         this.version = version;
     }
 
-    public static Dependency toDependency(File file) {
-
-        String trimmedPath = getTrimmedPath(file);
-        String[] tokens = trimmedPath.split(Pattern.quote(File.separator));
-
-        String group = tokens[0];
-        String artifact = tokens[1];
-        String version = tokens[2];
-
-        return new Dependency(group, artifact, version);
-    }
-
-    private static String getTrimmedPath(File file) {
-        String path = file.toPath().toString();
-        if (file.getPath().contains(REMOTE)) {
-            return path.substring(path.indexOf(REMOTE) + REMOTE.length());
-        } else {
-            return path.substring(path.indexOf(LOCAL) + LOCAL.length());
-        }
-    }
 
     @Override
     public String toString() {
@@ -83,5 +61,4 @@ public class Dependency {
                 dependency.artifact.equals(artifact) &&
                 dependency.version.equals(version);
     }
-
 }
