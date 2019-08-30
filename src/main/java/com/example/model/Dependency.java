@@ -11,9 +11,9 @@ public class Dependency {
     private String artifact;
     private String version;
 
-    public Dependency(String group, String name, String version) {
+    public Dependency(String group, String artifact, String version) {
         this.group = group;
-        this.artifact = name;
+        this.artifact = artifact;
         this.version = version;
     }
 
