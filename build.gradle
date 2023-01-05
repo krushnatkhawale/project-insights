@@ -5,14 +5,14 @@ plugins {
 group 'com.example'
 version '1.0.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
+sourceCompatibility = '11'
 
 repositories {
     mavenLocal()
 }
 
 dependencies {
-    compile gradleApi()
+    implementation gradleApi()
 }
 
 publishing {
