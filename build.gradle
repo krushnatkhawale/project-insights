@@ -1,8 +1,20 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.example:dependency-collection-gradle-plugin:1.0.0-SNAPSHOT'
+    }
+}
+
 plugins {
     id 'java'
     id 'jacoco'
     id 'maven-publish'
 }
+
+apply plugin: com.example.DependencyCollectionPlugin
 group 'com.example'
 version '1.0.0-SNAPSHOT'
 

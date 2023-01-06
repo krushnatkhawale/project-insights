@@ -1,15 +1,20 @@
-package com.example.plugin;
+package com.example;
 
-import org.gradle.internal.impldep.org.junit.Rule;
-import org.gradle.internal.impldep.org.junit.rules.TemporaryFolder;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 
+import static com.example.util.Constants.TASK_NAME_AS_GRADLE;
+import static org.gradle.testkit.runner.TaskOutcome.SUCCESS;
+
 class DependencyCollectionPluginTest {
+
+    public static final String TASK_NAME = "dependencyCollection";
+
     @Test
     void apply() throws IOException {
 
@@ -17,9 +22,10 @@ class DependencyCollectionPluginTest {
 
         final BuildResult buildResult = GradleRunner.create()
                 .withProjectDir(file)
-                .withArguments("buildEnvironment")
+                .withArguments(TASK_NAME)
                 .build();
 
-        System.out.println("Hello: " + buildResult.task(":buildEnvironment").getOutcome());
+        Assertions.assertFalse(buildResult.getTasks().isEmpty());
+        Assertions.assertEquals(buildResult.task(TASK_NAME_AS_GRADLE).getOutcome(), SUCCESS);
     }
 }
