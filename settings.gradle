@@ -1,2 +1,4 @@
-rootProject.name = 'dependency-collection-gradle-plugin'
+rootProject.name = 'project-insights'
 
+include 'dependency-collection-gradle-plugin'
+include 'dependency-collection-plugin-tests'

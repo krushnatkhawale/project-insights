@@ -1,3 +1,5 @@
+package data.simpleTest
+
 buildscript {
     repositories {
         mavenLocal()
@@ -15,7 +17,7 @@ plugins {
 }
 
 apply plugin: com.example.DependencyCollectionPlugin
-group 'com.example'
+ group 'com.example'
 version '1.0.0-SNAPSHOT'
 
 sourceCompatibility = 1.8

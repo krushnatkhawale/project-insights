@@ -1,13 +1,11 @@
 plugins {
-    id 'java'
+    id 'java-library'
     id 'jacoco'
     id 'maven-publish'
 }
 
-group 'com.example'
-version '1.0.0-SNAPSHOT'
-
-sourceCompatibility = 1.8
+group 'com.mycompany'
+version '1.0.0'
 
 repositories {
     mavenLocal()
@@ -22,18 +20,32 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from components.java
-        }
-    }
-}
-
 test {
     finalizedBy jacocoTestReport // report is always generated after tests run
     useJUnitPlatform()
 }
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+jar {
+    manifest {
+        attributes 'Plugin-Class': 'com.mycompany.MyPlugin'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
 }
