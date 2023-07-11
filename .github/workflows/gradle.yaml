@@ -29,4 +29,4 @@ jobs:
           java-version: '8'
           distribution: 'temurin'
       - name: Build with Gradle
-        run: sh gradlew clean build
+        run: sh gradlew clean publishToMavenLocal build
