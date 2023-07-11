@@ -8,12 +8,10 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 
-import static com.example.util.Constants.TASK_NAME_AS_GRADLE;
+import static com.example.util.Constants.*;
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS;
 
 class DependencyCollectionPluginTest {
-
-    public static final String TASK_NAME = "dependencyCollection";
 
     @Test
     void apply() throws IOException {
@@ -26,6 +24,6 @@ class DependencyCollectionPluginTest {
                 .build();
 
         Assertions.assertFalse(buildResult.getTasks().isEmpty());
-        Assertions.assertEquals(buildResult.task(TASK_NAME_AS_GRADLE).getOutcome(), SUCCESS);
+        Assertions.assertEquals(buildResult.task(DEPENDENCY_COLLECTION_TASK).getOutcome(), SUCCESS);
     }
 }
