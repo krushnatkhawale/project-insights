@@ -1,4 +1,7 @@
-package com.example.model;
+package com.krushnatkhawale.model;
+
+import org.gradle.api.logging.Logger;
+import org.gradle.api.logging.Logging;
 
 import java.util.List;
 
@@ -10,6 +13,7 @@ public class Info {
     private String groupName;
     private List<Dependency> dependencies;
     private String host;
+    final Logger logger = Logging.getLogger(Info.class);
 
     public String getAppName() {
         return appName;
@@ -48,10 +52,10 @@ public class Info {
     }
 
     public void print() {
-        System.out.println(toInfoString());
+        logger.quiet(toInfoString());
     }
 
-    private static final String INFO_STRING = "  App: %s\n" +
-            "  Group: %s\n" +
-            "  No of dependencies: %s\n";
+    private static final String INFO_STRING = "       App: %s\n" +
+            "       Group: %s\n" +
+            "       No of dependencies: %s\n";
 }

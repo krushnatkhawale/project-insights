@@ -1,7 +1,9 @@
-package com.example.util;
+package com.krushnatkhawale.util;
 
-import com.example.model.Dependency;
-import com.example.model.Info;
+import com.krushnatkhawale.model.Dependency;
+import com.krushnatkhawale.model.Info;
+import org.gradle.api.logging.Logger;
+import org.gradle.api.logging.Logging;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,7 +14,7 @@ import java.net.URL;
 import java.util.regex.Pattern;
 
 public class Utils {
-
+    private static final Logger LOGGER = Logging.getLogger(Utils.class);
     public static final String REMOTE = "files-2.1\\";
     public static final String LOCAL = "repository\\";
 
@@ -26,12 +28,14 @@ public class Utils {
             con.setRequestProperty("Content-Type", "application/json");
             con.setRequestMethod("POST");
             con.setDoOutput(true);
-            project.getDependencies().forEach( d -> System.out.println("D: " + d) );
+            project.getDependencies().forEach( d -> LOGGER.quiet("D: " + d.flattedString()) );
+
+            LOGGER.quiet("      Application build info is being shared with monitoring tool ");
+
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = infoString.getBytes("utf-8");
                 os.write(input, 0, input.length);
             }
-            System.out.println("Application build info is being shared with monitoring tool");
 
             int responseCode = con.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) { //success
@@ -44,12 +48,12 @@ public class Utils {
                 }
                 in.close();
 
-                System.out.println("Thanks for helping to keep system up to date" + response.toString());
+                LOGGER.quiet("        Thanks for helping to keep system up to date" + response.toString());
             } else {
-                System.out.println("POST request not worked, status code: " + responseCode);
+                LOGGER.quiet("        POST request not worked, status code: " + responseCode);
             }
         } catch (Exception e) {
-            System.out.println("Error while posting dependencies: " + e.getMessage());
+            LOGGER.quiet("       Error while posting dependencies: " + e.getMessage());
         }
     }
 

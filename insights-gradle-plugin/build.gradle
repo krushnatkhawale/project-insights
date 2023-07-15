@@ -1,0 +1,54 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+group 'com.krushnatkhawale'
+version '1.0.0-SNAPSHOT'
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+sourceCompatibility = 1.8
+
+jar{
+    enabled = true
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation gradleApi()
+
+    testImplementation gradleTestKit()
+}
+
+tasks.withType(Test){
+    useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+shadowJar{
+    manifest{
+            attributes("Implementation-Title":"insights-gradle-plugin")
+            attributes("Implementation-Version": archiveVersion.get())
+    }
+}
+
+gradlePlugin {
+    plugins {
+        simplePlugin{
+            id = "com.krushnatkhawale.insights-plugin"
+            implementationClass = "com.krushnatkhawale.plugin.InsightsPlugin"
+        }
+    }
+}

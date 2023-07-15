@@ -1,11 +1,13 @@
-package com.example.model.main.java.com.example.plugin;
+package com.krushnatkhawale.plugin;
 
-import com.example.model.main.java.com.example.model.Dependency;
-import com.example.model.main.java.com.example.model.Info;
-import com.example.model.main.java.com.example.util.Utils;
+import com.krushnatkhawale.model.Dependency;
+import com.krushnatkhawale.model.Info;
+import com.krushnatkhawale.util.Utils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.logging.Logger;
+import org.gradle.api.logging.Logging;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.TaskAction;
 
@@ -16,7 +18,9 @@ import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
 
-public class DependencyCollectionTask extends DefaultTask {
+public class InsightsCollectionTask extends DefaultTask {
+
+    final Logger logger = Logging.getLogger(InsightsCollectionTask.class);
 
     private Project project = getProject();
 
@@ -28,6 +32,18 @@ public class DependencyCollectionTask extends DefaultTask {
 
     @Input
     boolean disablePost;
+
+    public String getTargetUrl() {
+        return targetUrl;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public boolean isDisablePost() {
+        return disablePost;
+    }
 
     @TaskAction
     void taskAction() {
@@ -42,11 +58,10 @@ public class DependencyCollectionTask extends DefaultTask {
     private void post(Info projectInfo) {
 
         if (disablePost) {
-            System.out.println("  Dependency posting disabled!");
-            return;
+            logger.quiet("       Dependency posting disabled!");
+        } else {
+            Utils.post(projectInfo);
         }
-
-        Utils.post(projectInfo);
     }
 
     private Info getProjectInfo() {
@@ -55,7 +70,7 @@ public class DependencyCollectionTask extends DefaultTask {
         String appName = ofNullable(this.appName).orElse(project.getName());
         List<Dependency> collect = getDependencies(project);
 
-        String host = ofNullable(targetUrl).orElse("defaultHost:8080//path");
+        String host = ofNullable("http://"+targetUrl).orElse("http://localhost:8080/path");
 
         Info info = new Info();
         info.setGroupName(group);

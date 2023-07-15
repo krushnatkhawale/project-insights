@@ -1,4 +1,4 @@
-package com.example.model.main.java.com.example.model;
+package com.krushnatkhawale.model;
 
 import static java.lang.String.format;
 
@@ -57,5 +57,9 @@ public class Dependency {
         return dependency.group.equals(group) &&
                 dependency.artifact.equals(artifact) &&
                 dependency.version.equals(version);
+    }
+
+    public String flattedString() {
+        return format("%s:%s:%s ", group, artifact, version);
     }
 }
